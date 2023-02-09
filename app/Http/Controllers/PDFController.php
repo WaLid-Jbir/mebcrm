@@ -26,7 +26,7 @@ class PDFController extends Controller
         $prospect_id = $prospect->id;
 
         $filePath = public_path("model.pdf");
-        $outputFilePath = public_path('/contracts/'.''.str_replace(['-',':',' '], '', $prospect->created_at).'.'."pdf");
+        $outputFilePath = public_path('/contracts/'.'MonExpertBudget-'.$prospect->nom.'-'.str_replace(['-',':',' '], '', $prospect->updated_at).'.'."pdf");
         $this->fillPDFFile($filePath, $outputFilePath, $prospect_id);
         
         return response()->file($outputFilePath);
