@@ -14,6 +14,7 @@ class Adherant extends Model
     use HasFactory;
 
     protected $fillable = [
+        'civilite',
         'nom',
         'prenom',
         'naissance',

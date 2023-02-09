@@ -33,6 +33,12 @@ class AdherantResource extends Resource
         return $form
             ->schema([
                 Card::make()->schema([
+                    Forms\Components\Select::make('civilite')
+                    ->options([
+                        'mr' => 'Mr',
+                        'mme' => 'Mme',
+                    ])
+                    ->required(),
                     Forms\Components\TextInput::make('nom')
                         ->required()
                         ->maxLength(255),
@@ -50,7 +56,8 @@ class AdherantResource extends Resource
                     ->required(),
                     Forms\Components\TextInput::make('ville')
                     ->required(),
-                    Forms\Components\TextInput::make('zip')->label('Code Postal'),
+                    Forms\Components\TextInput::make('zip')->label('Code Postal')
+                    ->required(),
                     Forms\Components\TextInput::make('pays')
                     ->required(),
                     Forms\Components\TextInput::make('telephone')
