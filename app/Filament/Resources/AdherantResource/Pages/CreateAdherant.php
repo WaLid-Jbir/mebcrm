@@ -3,6 +3,9 @@
 namespace App\Filament\Resources\AdherantResource\Pages;
 
 use App\Filament\Resources\AdherantResource;
+use App\Http\Controllers\PDFController;
+use App\Models\Adherant;
+use App\Models\Envolope;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Auth;
@@ -23,8 +26,10 @@ class CreateAdherant extends CreateRecord
         return $data;
     }
 
-    // protected function afterCreate(): void
+    // protected function afterCreate(array $data): void
     // {
-    //     // Runs after the form fields are saved to the database.
+    //     // $adherant_id = $data['id'];
+    //     // $foo = new PDFController();
+    //     // $foo->index($adherant_id);
     // }
 }

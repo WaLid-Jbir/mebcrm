@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\MebMail;
 use App\Models\Adherant;
+use App\Models\Envolope;
 use Illuminate\Http\Request;
 use setasign\Fpdi\Fpdi;
 use App\Models\Prospect;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str; 
 
 class PDFController extends Controller
@@ -26,9 +29,21 @@ class PDFController extends Controller
         $prospect_id = $prospect->id;
 
         $filePath = public_path("model.pdf");
-        $outputFilePath = public_path('/contracts/'.'MonExpertBudget-'.$prospect->nom.'-'.str_replace(['-',':',' '], '', $prospect->updated_at).'.'."pdf");
+        $outputFilePath = public_path('contracts/'.'MonExpertBudget-'.$prospect->nom.'-'.str_replace(['-',':',' '], '', $prospect->updated_at).'.'."pdf");
+        $pdf_name = 'MonExpertBudget-'.$prospect->nom.'-'.str_replace(['-',':',' '], '', $prospect->updated_at).'.'."pdf";
+        //dd($pdf_name);
         $this->fillPDFFile($filePath, $outputFilePath, $prospect_id);
-        
+
+        // Create Envolope in DB.
+        if(Envolope::where('adherant_id', $prospect_id)->exists() == false){
+            Envolope::create([
+                'name' => $pdf_name,
+                'adherant_id' => $prospect_id,
+            ]);
+        }
+
+        //Mail::to($prospect->email)->send(new MebMail($outputFilePath));
+
         return response()->file($outputFilePath);
     }
 
@@ -59,7 +74,7 @@ class PDFController extends Controller
         $text = Str::ucfirst('Reference: '). str_replace(['-',':',' '], '', $prospect->created_at);
         $fpdi->Text($left,$top,$text);
         
-        if(($prospect->civilite)=='Mme'){
+        if(($prospect->civilite)=='mme'){
             
             $fpdi->SetFont("helvetica", "B", 15);
             $fpdi->SetTextColor(0,0,0);
@@ -166,8 +181,6 @@ class PDFController extends Controller
         $fpdi->Text($left,$top,$text);
         
         
-        
-
         for ($i=2; $i<=$count; $i++) {
 
             $template = $fpdi->importPage($i);
@@ -176,7 +189,9 @@ class PDFController extends Controller
             $fpdi->useTemplate($template);
         }
 
+
         return $fpdi->Output($outputFilePath, 'F');
+
     }
 
 }

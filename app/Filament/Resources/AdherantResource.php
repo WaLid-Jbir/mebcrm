@@ -4,6 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\AdherantResource\Pages;
 use App\Filament\Resources\AdherantResource\RelationManagers;
+use App\Http\Controllers\DocusignController;
+use App\Http\Controllers\EnvelopeController;
 use App\Models\Adherant;
 use Filament\Forms;
 use Filament\Forms\Components\Card;
@@ -17,6 +19,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Http\Controllers\PDFController;
+use Filament\Notifications\Notification;
+use GuzzleHttp\Psr7\Request;
 
 class AdherantResource extends Resource
 {
@@ -76,6 +80,7 @@ class AdherantResource extends Resource
                     ->default('devis envoyer')
                     ->label('Flag')
                     ->hiddenOn('create')
+                    ->hiddenOn('edit')
                     ->required(),
                 ])
                 ->columns(2),
@@ -231,6 +236,13 @@ class AdherantResource extends Resource
                     $adherant_id = $record->id;
                     $foo = new PDFController();
                     $foo->index($adherant_id);
+
+                    $envolope = new DocusignController();
+                    $envolope->signDocument($adherant_id);
+                    
+
+                    // $mail = new EnvelopeController();
+                    // $mail->createEnvelopeAndSendEmail($adherant_id);
                 })
                 ->icon('heroicon-o-mail'),
 
@@ -240,7 +252,6 @@ class AdherantResource extends Resource
 
                 Tables\Actions\Action::make('Changer Status')
                 ->color('success')
-                ->successNotificationTitle('Devis créer avec succès')
                 ->icon('heroicon-o-pencil')
                 ->size('sm')
                 ->mountUsing(fn (Forms\ComponentContainer $form, Adherant $record) => $form->fill([

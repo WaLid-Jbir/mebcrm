@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\AdherantFamille;
 use App\Models\Infobank;
 use App\Models\Diver;
+use App\Models\Envolope;
+
 
 class Adherant extends Model
 {
@@ -43,5 +45,9 @@ class Adherant extends Model
 
     public function diver(){
         return $this->hasOne(Diver::class);
+    }
+
+    public function envolopes(){
+        return $this->hasOne(Envolope::class);
     }
 }
