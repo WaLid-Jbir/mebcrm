@@ -12,15 +12,9 @@ class Infobank extends Model
     protected $fillable = [
         'adherant_id',
         'titulaire',
-        'adresse',
-        'ville',
-        'zip',
-        'pays',
-        'email',
-        'telephone',
-        'fixe',
         'iban',
         'bic',
         'prelevement',
+        'prelevement_date',
     ];
 }

@@ -25,7 +25,7 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
     protected static ?int $navigationSort = 1;
-    protected static ?string $navigationGroup = 'Settings';
+    protected static ?string $navigationGroup = 'Administration';
 
     public static function form(Form $form): Form
     {
@@ -48,10 +48,12 @@ class UserResource extends Resource
                         ->maxLength(255),
                     Select::make('roles')
                     ->multiple()
+                    ->required()
                     ->relationship('roles', 'name')
                     ->preload(),
                     Select::make('entreprise_id',)
                     ->preload()
+                    ->required()
                     ->relationship('entreprise', 'name'),
                 ])
                 ->columns(2)

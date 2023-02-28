@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\AdherantResource\Pages;
 
+use App\Filament\Resources\AadherantResource\Widgets\AdherantStatsOverview;
 use App\Filament\Resources\AdherantResource;
 use App\Models\Adherant;
 use Filament\Pages\Actions;
@@ -31,10 +32,10 @@ class ListAdherants extends ListRecords
         $user = Auth::user();
 
         if($user->hasRole('Admin')){
-            return Adherant::query();
+            return Adherant::query()->orderBy('created_at', 'desc');
         }
         else{
-            return Adherant::where('user_id',$id);
+            return Adherant::where('user_id',$id)->orderBy('created_at', 'desc');
         }
     }
 
@@ -42,4 +43,12 @@ class ListAdherants extends ListRecords
     {
         return [25, 50, 75, 100];
     }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            AdherantStatsOverview::class,
+        ];
+    }
+    
 }

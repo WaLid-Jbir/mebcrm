@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use DocuSign\eSign\Configuration;
 use DocuSign\eSign\Api\EnvelopesApi;
 use DocuSign\eSign\Client\ApiClient;
+use DocuSign\eSign\Client\ApiException;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Mail;
@@ -106,32 +107,33 @@ class DocusignController extends Controller
     }
 
 
-    public function login()
-    {
-        $client = new Client();
+    // public function login()
+    // {
+    //     $client = new Client();
 
-        $response = $client->post('https://account-d.docusign.com/oauth/token', [
-            'form_params' => [
-                'grant_type' => 'password',
-                'username' => 'supernova.r3dx@gmail.com',
-                'password' => 'AZERTY@1941',
-                'client_id' => env('DOCUSIGN_CLIENT_ID'),
-                'client_secret' => env('DOCUSIGN_CLIENT_SECRET'),
-                'scope' => 'signature'
-            ]
-        ]);
+    //     $response = $client->post('https://account-d.docusign.com/oauth/token', [
+    //         'form_params' => [
+    //             'grant_type' => 'password',
+    //             'username' => 'supernova.r3dx@gmail.com',
+    //             'password' => 'AZERTY@1941',
+    //             'client_id' => env('DOCUSIGN_CLIENT_ID'),
+    //             'client_secret' => env('DOCUSIGN_CLIENT_SECRET'),
+    //             'scope' => 'signature'
+    //         ]
+    //     ]);
 
-        $result = json_decode((string) $response->getBody(), true);
-        $accessToken = $result['access_token'];
+    //     $result = json_decode((string) $response->getBody(), true);
+    //     $accessToken = $result['access_token'];
 
-        dd($accessToken);
-    }
+    //     dd($accessToken);
+    // }
+
 
     public function signDocument($id)
     {       
         try{
             //$this->login();
-            Session::put('docusign_auth_code', 'eyJ0eXAiOiJNVCIsImFsZyI6IlJTMjU2Iiwia2lkIjoiNjgxODVmZjEtNGU1MS00Y2U5LWFmMWMtNjg5ODEyMjAzMzE3In0.AQoAAAABAAUABwCAu24i0w3bSAgAgPuRMBYO20gCAE2E5OxmxH5IrPk1xFNQcUwVAAEAAAAYAAEAAAAFAAAADQAkAAAAMWYyMzNiNzctZTgxOS00ZjM5LWI1MTYtN2NlMjc5MWM5ODAyIgAkAAAAMWYyMzNiNzctZTgxOS00ZjM5LWI1MTYtN2NlMjc5MWM5ODAyMACAUYGP0Q3bSDcAsHlGL9jKa0il88OO9QHUfQ.laR1bLA6gJpbBkqlN9DHxWjn3oHgt5WhGUFG96ANsu4DutoeJN2-h18J1M_cqANMTV7Za1T0nm4E7tK-jP5seqWk6vRmEqVPtK30WabLYQTyjSBrToDXpD9GeeMu3FD5IqeedRlciFJ7SD26ZWzaDw67whs7zYMIwNj1ByXDMWWOmXb8Cu5r-jgB2v0G1BuuNg-TAvyrBdbu4FdQWZJwEdyhoxNjXPCmlPx7MCWCI9LpEG0Bg2HUcgB_eEPvjlE5nFFgjvoInEPP3Fzvh3RQZo7ZTf6XlatwNoa-KzInkNE77SkrRk_U053dlxMT_B19Pxn2_A8r9CyE2cUJFbtLeA');
+            Session::put('docusign_auth_code', env('DOCUSIGN_ACCESS_TOCKEN'));
             $prospect = Adherant::findOrFail($id);
             $prospect_id = $prospect->id;
 
@@ -168,7 +170,12 @@ class DocusignController extends Controller
         $url_sign = $results['url'];
 
         Mail::to($prospect->email)->send(new MebMail($url_sign));
-        
+
+        Adherant::where('id', $id)
+        ->update([
+            'flag' => 'devis envoye'
+        ]);
+
         // dd($results['url']);
 
         //return redirect()->to($results['url']);

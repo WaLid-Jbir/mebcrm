@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\AadherantResource\Widgets\AdherantStatsOverview;
 use App\Filament\Resources\AdherantResource\Pages;
 use App\Filament\Resources\AdherantResource\RelationManagers;
 use App\Http\Controllers\DocusignController;
@@ -21,6 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Http\Controllers\PDFController;
 use Filament\Notifications\Notification;
 use GuzzleHttp\Psr7\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdherantResource extends Resource
 {
@@ -50,7 +52,7 @@ class AdherantResource extends Resource
                     ->label('Prénom')
                         ->required()
                         ->maxLength(255),
-                    Forms\Components\DateTimePicker::make('naissance')
+                    Forms\Components\DatePicker::make('naissance')
                     ->required()
                     ->label('Date de naissance'),
                     Forms\Components\TextInput::make('email')
@@ -62,8 +64,8 @@ class AdherantResource extends Resource
                     ->required(),
                     Forms\Components\TextInput::make('zip')->label('Code Postal')
                     ->required(),
-                    Forms\Components\TextInput::make('pays')
-                    ->required(),
+                    // Forms\Components\TextInput::make('pays')
+                    // ->required(),
                     Forms\Components\TextInput::make('telephone')
                     ->required()
                     ->tel()
@@ -73,14 +75,14 @@ class AdherantResource extends Resource
                     ->tel(),
                     Forms\Components\Select::make('flag')
                     ->options([
+                        'devis cree' => 'Devis Crée',
                         'devis envoye' => 'Devis Envoyé',
-                        'devis accepte' => 'Devis Accepté',
-                        'devis rejete' => 'Devis Rejeté',
+                        // 'devis accepte' => 'Devis Accepté',
+                        // 'devis rejete' => 'Devis Rejeté',
                     ])
-                    ->default('devis envoyer')
+                    ->default('devis cree')
                     ->label('Flag')
-                    ->hiddenOn('create')
-                    ->hiddenOn('edit')
+                    ->hiddenOn(['create','edit'])
                     ->required(),
                 ])
                 ->columns(2),
@@ -129,40 +131,24 @@ class AdherantResource extends Resource
                         ->schema([
                             Forms\Components\TextInput::make('titulaire')
                             ->required(),
-                            Forms\Components\TextInput::make('adresse')
-                            ->required(),
-                            Forms\Components\TextInput::make('ville')
-                            ->required(),
-                            Forms\Components\TextInput::make('zip')
-                            ->required()
-                            ->label('Code Postal'),
-                            Forms\Components\TextInput::make('pays')
-                            ->required(),
-                            Forms\Components\TextInput::make('email')
-                            ->email()
-                            ->required(),
-                            Forms\Components\TextInput::make('telephone')
-                            ->required()
-                            ->tel()
-                            ->label('Téléphone'),
-                            Forms\Components\TextInput::make('fixe')
-                            ->tel()
-                            ->required(),
                             Forms\Components\TextInput::make('iban')
                             ->required(),
                             Forms\Components\TextInput::make('bic')
                             ->required(),
                             Forms\Components\Select::make('prelevement')
+                            ->label('Mode Prélèvement')
                             ->options([
-                                'prélèvement annuel le 5' => 'Prélèvement Annuel le 5',
-                                'prélèvement annuel le 10' => 'Prélèvement Annuel le 10',
-                                'prélèvement annuel le 15' => 'Prélèvement Annuel le 15',
-                                'prélèvement mensuel le 5' => 'Prélèvement Mensuel le 5',
-                                'prélèvement mensuel le 10' => 'Prélèvement Mensuel le 10',
-                                'prélèvement mensuel le 15' => 'Prélèvement Mensuel le 15',
+                                'mensuel' => 'Mensuel',
+                                'annuel' => 'Annuel',
                             ])
-                            ->label('Prélèvement')
+                            ->required(),
+                            Forms\Components\DatePicker::make('prelevement_date')
+                            ->label('Date Prélèvement')
+                            ->minDate(now())
                             ->required()
+                            ->columnSpan([
+                                'sm' => 2,
+                            ]),
                         ])
                         ->minItems(1)
                         ->maxItems(1)
@@ -193,6 +179,9 @@ class AdherantResource extends Resource
                             ->required()
                             ->label('Souhaitez-vous l\'inscription sur Bloctel ?'),
                             Forms\Components\Textarea::make('commentaire')
+                            ->columnSpan([
+                                'sm' => 2,
+                            ]),
                         ])
                         ->minItems(1)
                         ->maxItems(1)
@@ -212,17 +201,22 @@ class AdherantResource extends Resource
                 Tables\Columns\BadgeColumn::make('flag')
                 ->label('Status')
                 ->color(static function ($state): string {
-                    if ($state === 'devis envoye') {
+                    if ($state === 'devis cree') {
                         return 'secondary';
                     }
-                    elseif($state === 'devis accepte'){
-                        return 'success';
+                    if($state === 'devis envoye') {
+                        return 'primary';
                     }
-                    elseif($state === 'devis rejete'){
-                        return 'danger';
-                    }
+                    // if($state === 'devis accepte'){
+                    //     return 'success';
+                    // }
+                    // if($state === 'devis rejete'){
+                    //     return 'danger';
+                    // }
+                    //just added in saturday 18/02/2023
+                    return 'secondary';
                 }),
-                Tables\Columns\TextColumn::make('user.name')->label('Crée par'),
+                Tables\Columns\TextColumn::make('user.name')->label('Crée par')
 
             ])
             ->filters([
@@ -230,8 +224,8 @@ class AdherantResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\Action::make('Mail')
+                //Tables\Actions\DeleteAction::make(),
+                Tables\Actions\Action::make('Envoyer devis par mail')
                 ->action(function (Adherant $record): void {
                     $adherant_id = $record->id;
                     $foo = new PDFController();
@@ -240,38 +234,43 @@ class AdherantResource extends Resource
                     $envolope = new DocusignController();
                     $envolope->signDocument($adherant_id);
                     
-
+                    Notification::make() 
+                    ->title('Message envoyé')
+                    ->success()
+                    ->send();
+                    
                     // $mail = new EnvelopeController();
                     // $mail->createEnvelopeAndSendEmail($adherant_id);
                 })
+                ->color('success')
                 ->icon('heroicon-o-mail'),
 
 
 
-
-
-                Tables\Actions\Action::make('Changer Status')
-                ->color('success')
-                ->icon('heroicon-o-pencil')
-                ->size('sm')
-                ->mountUsing(fn (Forms\ComponentContainer $form, Adherant $record) => $form->fill([
-                    'flag' => $record,
-                ]))
-                ->action(function (Adherant $record, array $data): void {
-                    $record->flag = ($data['flag']);
-                    $record->save();
-                })
-                ->form([
-                    Forms\Components\Select::make('flag')
-                        ->label('Status')
-                        ->options([
-                            'devis envoye' => 'Devis Envoyé',
-                            'devis accepte' => 'Devis Accepté',
-                            'devis rejete' => 'Devis Rejeté',
-                        ])
-                        ->required(),
-                ])
-
+                // Tables\Actions\Action::make('Changer Status')
+                // ->color('success')
+                // ->modalHeading(fn (Adherant $record): string => "Changer status de ({$record->nom} {$record->prenom})")
+                // ->icon('heroicon-o-pencil')
+                // ->size('sm')
+                // ->mountUsing(fn (Forms\ComponentContainer $form, Adherant $record) => $form->fill([
+                //     'flag' => $record,
+                // ]))
+                // ->action(function (Adherant $record, array $data): void {
+                //     $record->flag = ($data['flag']);
+                //     $record->save();
+                // })
+                // ->form([
+                //     Forms\Components\Select::make('flag')
+                //         ->label('Status')
+                //         ->options([
+                //             'devis cree' => 'Devis Créé',
+                //             'devis envoye' => 'Devis Envoyé',
+                //             // 'devis accepte' => 'Devis Accepté',
+                //             // 'devis rejete' => 'Devis Rejeté',
+                //         ])
+                //         ->required(),
+                // ])
+                
                 //===========================================================
 
             ])
@@ -284,6 +283,13 @@ class AdherantResource extends Resource
     {
         return [
             //
+        ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            AdherantStatsOverview::class,
         ];
     }
     

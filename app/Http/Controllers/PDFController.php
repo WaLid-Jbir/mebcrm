@@ -8,6 +8,7 @@ use App\Models\Envolope;
 use Illuminate\Http\Request;
 use setasign\Fpdi\Fpdi;
 use App\Models\Prospect;
+use DocuSign\eSign\Model\Date;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str; 
 
@@ -155,15 +156,18 @@ class PDFController extends Controller
         $text = '180 EUR';
         $fpdi->Text($left,$top,$text);
 
-        //Extract number from text
-        $infob = $prospect->infobank->prelevement;
-        $info_int = (int) filter_var($infob, FILTER_SANITIZE_NUMBER_INT);
+        //Extract Day from Date 2023-02-25 
+        $infob = $prospect->infobank->prelevement_date;
+        $sepparator = '-';
+        $parts = explode($sepparator, $infob);
+        $sepparator = '-';
+        $info_day = $parts[2];
         
         $fpdi->SetFont("helvetica", "B", 10);
         $fpdi->SetTextColor(0,0,0);
-        $left = 133;
+        $left = 132;
         $top = 247;
-        $text = $info_int;
+        $text = $info_day;
         $fpdi->Text($left,$top,$text);
         
         $fpdi->SetFont("helvetica", "B", 10);

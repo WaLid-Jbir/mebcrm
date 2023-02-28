@@ -9,6 +9,7 @@ use App\Models\AdherantFamille;
 use App\Models\Infobank;
 use App\Models\Diver;
 use App\Models\Envolope;
+use App\Models\ProspectSuivi;
 
 
 class Adherant extends Model
@@ -24,7 +25,6 @@ class Adherant extends Model
         'adresse',
         'ville',
         'zip',
-        'pays',
         'telephone',
         'fixe',
         'flag',
@@ -49,5 +49,9 @@ class Adherant extends Model
 
     public function envolopes(){
         return $this->hasOne(Envolope::class);
+    }
+
+    public function prospectsuivis(){
+        return $this->hasMany(ProspectSuivi::class);
     }
 }

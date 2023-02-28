@@ -20,14 +20,13 @@ return new class extends Migration
             $table->string('nom');
             $table->string('prenom');
             $table->date('naissance');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->string('adresse');
             $table->string('ville');
             $table->string('zip');
-            $table->string('pays');
             $table->string('telephone');
             $table->string('fixe');
-            $table->string('flag')->default('devis envoye');
+            $table->string('flag')->default('devis cree');
             $table->timestamps();
         });
     }
