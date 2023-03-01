@@ -2,16 +2,33 @@
 
 use Illuminate\Support\Facades\Auth;
 
-return [
-
-    'buttons' => [
-
-        'logout' => [
-            'label' => 'Déconnexion',
+if (auth()->user()->hasRole(['Admin','Manager'])) {
+    return [
+        
+        'buttons' => [
+            
+            'logout' => [
+                'label' => 'Déconnexion',
+            ],
+            
         ],
-
-    ],
-
-    'welcome' => 'Bonjour :user de '.' '. Auth::user()->entreprise->name,
-
-];
+        
+        'welcome' => 'Bienvenue :user de '.' '. Auth::user()->entreprise->name,
+        
+    ];
+}
+else{
+    return [
+        
+        'buttons' => [
+            
+            'logout' => [
+                'label' => 'Déconnexion',
+            ],
+            
+        ],
+        
+        'welcome' => 'Bienvenue dans votre espace d\'adhésion',
+        
+    ];
+}

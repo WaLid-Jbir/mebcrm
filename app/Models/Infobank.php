@@ -17,4 +17,8 @@ class Infobank extends Model
         'prelevement',
         'prelevement_date',
     ];
+
+    protected $casts = [
+        'prelevement_date' => 'date',
+    ];
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Filament\Resources\AadherantResource\Widgets\AdherantStatsOverview;
+use App\Filament\Resources\ServicesResource\Widgets\ServicesOverview;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Http\Middleware\MirrorConfigToSubpackages;
@@ -142,6 +143,7 @@ return [
         'register' => [
             Widgets\AccountWidget::class,
             AdherantStatsOverview::class,
+            ServicesOverview::class,
             //Widgets\FilamentInfoWidget::class,
         ],
     ],

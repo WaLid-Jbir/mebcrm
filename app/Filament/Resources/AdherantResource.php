@@ -247,29 +247,29 @@ class AdherantResource extends Resource
 
 
 
-                // Tables\Actions\Action::make('Changer Status')
-                // ->color('success')
-                // ->modalHeading(fn (Adherant $record): string => "Changer status de ({$record->nom} {$record->prenom})")
-                // ->icon('heroicon-o-pencil')
-                // ->size('sm')
-                // ->mountUsing(fn (Forms\ComponentContainer $form, Adherant $record) => $form->fill([
-                //     'flag' => $record,
-                // ]))
-                // ->action(function (Adherant $record, array $data): void {
-                //     $record->flag = ($data['flag']);
-                //     $record->save();
-                // })
-                // ->form([
-                //     Forms\Components\Select::make('flag')
-                //         ->label('Status')
-                //         ->options([
-                //             'devis cree' => 'Devis Créé',
-                //             'devis envoye' => 'Devis Envoyé',
-                //             // 'devis accepte' => 'Devis Accepté',
-                //             // 'devis rejete' => 'Devis Rejeté',
-                //         ])
-                //         ->required(),
-                // ])
+                Tables\Actions\Action::make('Changer Status')
+                ->color('success')
+                ->modalHeading(fn (Adherant $record): string => "Changer status de ({$record->nom} {$record->prenom})")
+                ->icon('heroicon-o-pencil')
+                ->size('sm')
+                ->mountUsing(fn (Forms\ComponentContainer $form, Adherant $record) => $form->fill([
+                    'flag' => $record,
+                ]))
+                ->action(function (Adherant $record, array $data): void {
+                    $record->flag = ($data['flag']);
+                    $record->save();
+                })
+                ->form([
+                    Forms\Components\Select::make('flag')
+                        ->label('Status')
+                        ->options([
+                            'devis cree' => 'Devis Créé',
+                            'devis envoye' => 'Devis Envoyé',
+                            // 'devis accepte' => 'Devis Accepté',
+                            // 'devis rejete' => 'Devis Rejeté',
+                        ])
+                        ->required(),
+                ])
                 
                 //===========================================================
 
