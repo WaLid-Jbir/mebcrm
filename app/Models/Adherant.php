@@ -30,6 +30,9 @@ class Adherant extends Model
         'flag',
         'user_id'
     ];
+    
+    protected $casts = [ 'naissance'=>'date'];
+
 
     public function user(){
         return $this->belongsTo(User::class);

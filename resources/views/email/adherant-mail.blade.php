@@ -115,6 +115,16 @@
                                                             </td>
                                                         </tr>
                                                     </table>
+                                                    <table border="0" cellpadding="0" cellspacing="0" class="button_block block-3" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;" width="100%">
+                                                        <tr>
+                                                        <td class="pad" style="padding-bottom:30px;padding-top:30px;text-align:center;">
+                                                        <div align="center" class="alignment">
+                                                        <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://landing.mondupond.com/" style="height:47px;width:141px;v-text-anchor:middle;" arcsize="9%" strokeweight="0.75pt" strokecolor="#5766ED" fillcolor="#5766ed"><w:anchorlock/><v:textbox inset="0px,0px,0px,0px"><center style="color:#ffffff; font-family:Arial, sans-serif; font-size:18px"><![endif]--><a href="https://espace.monexpertbudget.fr/" style="text-decoration:none;display:inline-block;color:#ffffff;background-color:#5766ed;border-radius:4px;width:auto;border-top:1px solid #5766ED;font-weight:400;border-right:1px solid #5766ED;border-bottom:1px solid #5766ED;border-left:1px solid #5766ED;padding-top:5px;padding-bottom:5px;font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;font-size:18px;text-align:center;mso-border-alt:none;word-break:keep-all;" target="_blank"><span style="padding-left:20px;padding-right:20px;font-size:18px;display:inline-block;letter-spacing:normal;"><span dir="ltr" style="word-break: break-word; line-height: 36px;">Connectez-vous</span></span></a>
+                                                        <!--[if mso]></center></v:textbox></v:roundrect><![endif]-->
+                                                        </div>
+                                                        </td>
+                                                        </tr>
+                                                        </table>
                                                 </td>
                                             </tr>
                                         </tbody>

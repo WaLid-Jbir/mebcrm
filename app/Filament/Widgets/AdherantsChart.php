@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class AdherantsChart extends BarChartWidget
 {
     protected static ?string $heading = 'Prospects';
+    protected int | string | array $columnSpan = 'full';
 
     public static function canView(): bool
     {
@@ -26,7 +27,7 @@ class AdherantsChart extends BarChartWidget
 
         if (Auth::user()->hasRole('Admin')) {
             $adherants = Adherant::select('created_at')->get()->groupBy(function ($adherants){
-                return Carbon::parse($adherants->created_at)->format('l');
+                return Carbon::parse($adherants->created_at)->format('d-m-Y');
             });
             $quantities = [];
             foreach ($adherants as $adherant => $value) {
@@ -59,6 +60,7 @@ class AdherantsChart extends BarChartWidget
                     ],
                 ],
                 'labels' => $adherants->keys(),
+                
             ];
         }
 

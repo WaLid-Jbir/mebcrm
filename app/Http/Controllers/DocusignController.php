@@ -169,7 +169,9 @@ class DocusignController extends Controller
 
         $url_sign = $results['url'];
 
-        Mail::to($prospect->email)->send(new MebMail($url_sign));
+        $fullname=ucfirst($prospect->civilite).' '.ucfirst($prospect->nom).' '.ucfirst($prospect->prenom);
+
+        Mail::to($prospect->email)->send(new MebMail($url_sign, $fullname));
 
         Adherant::where('id', $id)
         ->update([

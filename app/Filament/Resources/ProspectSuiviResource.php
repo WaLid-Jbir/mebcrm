@@ -202,7 +202,8 @@ class ProspectSuiviResource extends Resource
                             ->danger()
                             ->send();
                         }else{
-                            $password = Str::random(8);
+                            $password = str_replace(['-',' '], '', $record->naissance->format("d-m-Y"));
+                            // dd($password);
                             $user = User::create([
                                 'name' => $record->nom,
                                 'email' => $record->email,
@@ -210,8 +211,8 @@ class ProspectSuiviResource extends Resource
                                 'password' => Hash::make($password),
                             ]);
                             $user->assignRole('Adherant');
-                            
-                            Mail::to($record->email)->send(new AdherantMail($record->email, $password));
+                            $fullname=ucfirst($record->civilite).' '.ucfirst($record->nom).' '.ucfirst($record->prenom);
+                            Mail::to($record->email)->send(new AdherantMail($record->email, $password, $fullname));
                         }
                     }
                 })

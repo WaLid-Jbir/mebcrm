@@ -21,11 +21,12 @@ class MebMail extends Mailable
      */
 
     public $url_sign;
+    public $fullname;
     
-    public function __construct($url_sign)
+    public function __construct($url_sign, $fullname)
     {
         $this->url_sign = $url_sign;
-        
+        $this->fullname = $fullname;
     }
 
     /**
@@ -35,7 +36,7 @@ class MebMail extends Mailable
      */
     public function build()
     {
-        return $this->view('email.mail', ['url_sign' => $this->url_sign])->subject('Hello world');
+        return $this->view('email.mail', ['url_sign' => $this->url_sign])->subject('Bienvenue '.$this->fullname.' Dans MonExpertBudget');
     }
 
     /**

@@ -20,11 +20,13 @@ class AdherantMail extends Mailable
      */
     public $email;
     public $password;
+    public $fullname;
     
-    public function __construct($email,$password)
+    public function __construct($email,$password,$fullname)
     {
         $this->email = $email;
         $this->password = $password;
+        $this->fullname = $fullname;
     }
 
     /**
@@ -34,7 +36,7 @@ class AdherantMail extends Mailable
      */
     public function build()
     {
-        return $this->view('email.adherant-mail', ['email' => $this->email, 'password' => $this->password])->subject('Hello world');
+        return $this->view('email.adherant-mail', ['email' => $this->email, 'password' => $this->password])->subject('Confidentiel! '.$this->fullname.' voici les details de votre compte MonExpertBudget');
     }
 
     /**
