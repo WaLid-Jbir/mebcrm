@@ -59,10 +59,13 @@ class AdherantResource extends Resource
                     ->email()
                     ->required(),
                     Forms\Components\TextInput::make('adresse')
+                    ->maxLength(255)
                     ->required(),
                     Forms\Components\TextInput::make('ville')
+                    ->maxLength(255)
                     ->required(),
                     Forms\Components\TextInput::make('zip')->label('Code Postal')
+                    ->maxLength(255)
                     ->required(),
                     // Forms\Components\TextInput::make('pays')
                     // ->required(),
@@ -95,8 +98,10 @@ class AdherantResource extends Resource
                         ->relationship()
                         ->schema([
                             Forms\Components\TextInput::make('nom')
+                            ->maxLength(255)
                             ->required(),
                             Forms\Components\TextInput::make('prenom')
+                            ->maxLength(255)
                             ->required()
                             ->label('Prénom'),
                             Forms\Components\DatePicker::make('naissance')
@@ -130,10 +135,13 @@ class AdherantResource extends Resource
                         ->relationship()
                         ->schema([
                             Forms\Components\TextInput::make('titulaire')
+                            ->maxLength(255)
                             ->required(),
                             Forms\Components\TextInput::make('iban')
+                            ->maxLength(255)
                             ->required(),
                             Forms\Components\TextInput::make('bic')
+                            ->maxLength(255)
                             ->required(),
                             Forms\Components\Select::make('prelevement')
                             ->label('Mode Prélèvement')
@@ -247,29 +255,29 @@ class AdherantResource extends Resource
 
 
 
-                Tables\Actions\Action::make('Changer Status')
-                ->color('success')
-                ->modalHeading(fn (Adherant $record): string => "Changer status de ({$record->nom} {$record->prenom})")
-                ->icon('heroicon-o-pencil')
-                ->size('sm')
-                ->mountUsing(fn (Forms\ComponentContainer $form, Adherant $record) => $form->fill([
-                    'flag' => $record,
-                ]))
-                ->action(function (Adherant $record, array $data): void {
-                    $record->flag = ($data['flag']);
-                    $record->save();
-                })
-                ->form([
-                    Forms\Components\Select::make('flag')
-                        ->label('Status')
-                        ->options([
-                            'devis cree' => 'Devis Créé',
-                            'devis envoye' => 'Devis Envoyé',
-                            // 'devis accepte' => 'Devis Accepté',
-                            // 'devis rejete' => 'Devis Rejeté',
-                        ])
-                        ->required(),
-                ])
+                // Tables\Actions\Action::make('Changer Status')
+                // ->color('success')
+                // ->modalHeading(fn (Adherant $record): string => "Changer status de ({$record->nom} {$record->prenom})")
+                // ->icon('heroicon-o-pencil')
+                // ->size('sm')
+                // ->mountUsing(fn (Forms\ComponentContainer $form, Adherant $record) => $form->fill([
+                //     'flag' => $record,
+                // ]))
+                // ->action(function (Adherant $record, array $data): void {
+                //     $record->flag = ($data['flag']);
+                //     $record->save();
+                // })
+                // ->form([
+                //     Forms\Components\Select::make('flag')
+                //         ->label('Status')
+                //         ->options([
+                //             'devis cree' => 'Devis Créé',
+                //             'devis envoye' => 'Devis Envoyé',
+                //             // 'devis accepte' => 'Devis Accepté',
+                //             // 'devis rejete' => 'Devis Rejeté',
+                //         ])
+                //         ->required(),
+                // ])
                 
                 //===========================================================
 

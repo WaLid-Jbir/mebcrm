@@ -33,6 +33,7 @@ class PostResource extends Resource
                         Forms\Components\TextInput::make('title')
                             ->label('Titre')
                             ->required()
+                            ->maxLength(255)
                             ->reactive()
                             ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug($state))),
 
@@ -44,15 +45,18 @@ class PostResource extends Resource
 
                         Forms\Components\Textarea::make('excerpt')
                             ->label('Excerpt')
+                            ->helperText('Ce champ représente le contenu de l\'e-mail envoyé aux adhérants de la société')
+                            ->required()
                             ->rows(2)
                             ->minLength(50)
-                            ->maxLength(1000)
+                            ->maxLength(600)
                             ->columnSpan([
                                 'sm' => 2,
                             ]),
 
                         Forms\Components\FileUpload::make('banner')
                             ->label('Image')
+                            ->required()
                             ->image()
                             ->maxSize(5120)
                             ->imageCropAspectRatio('16:9')
@@ -63,12 +67,15 @@ class PostResource extends Resource
 
                             Forms\Components\RichEditor::make('content')
                             ->label('Contenu')
+                            ->required()
                             ->columnSpan([
                                 'sm' => 2,
                             ]),
 
                             Forms\Components\DatePicker::make('published_at')
                             ->label('Publié à')
+                            ->default(now())
+                            ->required()
                             ->columnSpan([
                                 'sm' => 2,
                             ]),

@@ -18,7 +18,7 @@ class AdherantPolicy
      */
     public function viewAny(User $user)
     {
-        if($user->hasRole('Admin') || $user->hasPermissionTo('view_prospects')){
+        if($user->hasRole(['Admin','Manager']) || $user->hasPermissionTo('view_prospects')){
             return true;
         }
         return false;
@@ -44,7 +44,7 @@ class AdherantPolicy
      */
     public function create(User $user)
     {
-        if($user->hasRole('Admin') || $user->hasPermissionTo('create_prospects')){
+        if($user->hasRole(['Admin','Manager']) || $user->hasPermissionTo('create_prospects')){
             return true;
         }
         return false;
@@ -59,7 +59,7 @@ class AdherantPolicy
      */
     public function update(User $user, Adherant $adherant)
     {
-        if($user->hasRole('Admin') || $user->hasPermissionTo('update_prospects')){
+        if($user->hasRole(['Admin','Manager']) || $user->hasPermissionTo('update_prospects')){
             return true;
         }
         return false;
@@ -74,7 +74,7 @@ class AdherantPolicy
      */
     public function delete(User $user, Adherant $adherant)
     {
-        if($user->hasRole('Admin') || $user->hasPermissionTo('delete_prospects')){
+        if($user->hasRole(['Admin','Manager']) || $user->hasPermissionTo('delete_prospects')){
             return true;
         }
         return false;

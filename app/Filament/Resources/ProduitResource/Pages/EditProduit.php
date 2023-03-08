@@ -10,6 +10,11 @@ class EditProduit extends EditRecord
 {
     protected static string $resource = ProduitResource::class;
 
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
     protected function getActions(): array
     {
         return [

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('adherant_id')->constrained()->onDelete('cascade');
             $table->string('question1');
             $table->string('question2');
-            $table->string('commentaire')->nullable();
+            $table->longText('commentaire')->nullable();
             $table->timestamps();
         });
     }

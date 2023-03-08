@@ -89,7 +89,8 @@ return [
     'auth' => [
         'guard' => env('FILAMENT_AUTH_GUARD', 'web'),
         'pages' => [
-            'login' => \Filament\Http\Livewire\Auth\Login::class,
+            'login' => \JeffGreco13\FilamentBreezy\Http\Livewire\Auth\Login::class,
+            // 'login' => \Filament\Http\Livewire\Auth\Login::class,
         ],
     ],
 
@@ -242,7 +243,7 @@ return [
         'footer' => [
             'should_show_logo' => false,
         ],
-        'max_content_width' => null,
+        'max_content_width' => 'full',
         'notifications' => [
             'vertical_alignment' => 'top',
             'alignment' => 'center',

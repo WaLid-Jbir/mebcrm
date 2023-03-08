@@ -28,41 +28,48 @@ class PromotionResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('title')
-                    ->label(__('Titre de Promotion'))
-                    ->required(),
-                    Forms\Components\TextInput::make('remise')
-                    ->label(__('Montant de remise'))
-                    ->required(),
-                    // ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug($state))),
+                Forms\Components\Card::make()
+                    ->schema([
+                        Forms\Components\TextInput::make('title')
+                            ->label(__('Titre de Promotion'))
+                            ->maxLength(255)
+                            ->required(),
+                            Forms\Components\TextInput::make('remise')
+                            ->label(__('Montant de remise'))
+                            ->maxLength(255)
+                            ->required(),
+                            // ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug($state))),
 
-                // Forms\Components\TextInput::make('slug')
-                //     ->label(__('Slug'))
-                //     ->disabled()
-                //     ->required()
-                //     ->unique(Promotion::class, 'slug', fn ($record) => $record),
-                Forms\Components\TextInput::make('coupon')
-                ->label(__('coupon'))
-                ->required(),
-                Forms\Components\TextInput::make('lien')
-                ->label(__('lien'))
-                ->url()
-                ->required(),
-                
-                    // Forms\Components\FileUpload::make('banner')
-                    // ->label(__('Image'))
-                    // ->image()
-                    // ->maxSize(5120)
-                    // ->imageCropAspectRatio('16:9')
-                    // ->directory('blog'),
-                Forms\Components\DatePicker::make('published_at')
-                ->label('Publié le'),
+                        // Forms\Components\TextInput::make('slug')
+                        //     ->label(__('Slug'))
+                        //     ->disabled()
+                        //     ->required()
+                        //     ->unique(Promotion::class, 'slug', fn ($record) => $record),
+                        Forms\Components\TextInput::make('coupon')
+                        ->label(__('Coupon'))
+                        ->maxLength(255)
+                        ->required(),
+                        Forms\Components\TextInput::make('lien')
+                        ->label(__('Lien'))
+                        ->url()
+                        ->required(),
+                        
+                            // Forms\Components\FileUpload::make('banner')
+                            // ->label(__('Image'))
+                            // ->image()
+                            // ->maxSize(5120)
+                            // ->imageCropAspectRatio('16:9')
+                            // ->directory('blog'),
+                        Forms\Components\DatePicker::make('published_at')
+                        ->label('Publié le'),
 
-                // RichEditor::make('content') 
-                // ->required()               
-                // ->columnSpan([
-                //     'sm' => 2,
-                // ]),
+                        // RichEditor::make('content') 
+                        // ->required()               
+                        // ->columnSpan([
+                        //     'sm' => 2,
+                        // ]),
+                    ])
+                    ->columns(2),
             ]);
     }
 
@@ -71,7 +78,8 @@ class PromotionResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title')
-                ->weight('bold'),
+                ->weight('bold')
+                ->searchable(),
 
                 Tables\Columns\TextColumn::make('remise')
                 ->extraAttributes(['class' => 'text-2xl'])
@@ -116,8 +124,8 @@ class PromotionResource extends Resource
     {
         return [
             'index' => Pages\ListPromotions::route('/'),
-            // 'create' => Pages\CreatePromotion::route('/create'),
-            // 'edit' => Pages\EditPromotion::route('/{record}/edit'),
+            'create' => Pages\CreatePromotion::route('/create'),
+            'edit' => Pages\EditPromotion::route('/{record}/edit'),
         ];
     }    
 }

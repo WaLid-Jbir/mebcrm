@@ -26,7 +26,7 @@
             <div class="mt-3 lg:rounded-b-none lg:rounded-r flex flex-col justify-between leading-8">
                 <div class="my-6">
                     <p class="text-gray-700 text-xl">
-                        {!!html_entity_decode($record->content)!!}
+                        {!! $record->content !!}
                     </p>
                 </div>
                 <div class="text-gray-700 text-xs my-6 flex justify-between">

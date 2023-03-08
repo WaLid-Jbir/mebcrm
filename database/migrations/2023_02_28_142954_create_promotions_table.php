@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('coupon');            
-            $table->string('lien');            
+            $table->longText('lien');            
             $table->string('remise');
             $table->date('published_at')->nullable();
             $table->timestamps();

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('adherant_id')->constrained()->onDelete('cascade');
             $table->string('audio');
             $table->string('audio_status')->default('en attent de fichier');
-            $table->string('motif')->nullable();
+            $table->longText('motif')->nullable();
             $table->timestamps();
         });
     }

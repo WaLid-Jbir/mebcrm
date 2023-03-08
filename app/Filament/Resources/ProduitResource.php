@@ -34,6 +34,7 @@ class ProduitResource extends Resource
                     ->schema([
                         Forms\Components\TextInput::make('title')
                             ->label(__('Titre'))
+                            ->maxLength(255)
                             ->required()
                             ->reactive()
                             ->afterStateUpdated(fn ($state, callable $set) => $set('slug', Str::slug($state))),
@@ -47,14 +48,18 @@ class ProduitResource extends Resource
                         
                         Forms\Components\FileUpload::make('banner')
                             ->label(__('Image'))
+                            ->required()
                             ->image()
                             ->maxSize(5120)
                             ->imageCropAspectRatio('16:9')
                             ->directory('produits'),
-                        Forms\Components\DatePicker::make('published_at')
-                            ->label('Publié le'),
+
+                            Forms\Components\TextInput::make('phone')
+                            ->label('Numéro d\'expert')
+                            ->tel(),
 
                         Forms\Components\RichEditor::make('content')
+                            ->required()
                             ->columnSpan([
                                 'sm' => 2,
                             ]),
@@ -82,11 +87,10 @@ class ProduitResource extends Resource
                         Tables\Columns\TextColumn::make('contactez l\'un de nos experts')
                         ->default('Contactez l\'un de nos experts'),
 
-                        Tables\Columns\TextColumn::make('contact')
+                        Tables\Columns\TextColumn::make('phone')
                         ->label('Contactez un expert')
                         ->icon('heroicon-s-phone')
-                        ->color('secondary')
-                        ->default('0651487963'),
+                        ->color('secondary'),
                     ])->visibleFrom('md'),
                 ])
             ])

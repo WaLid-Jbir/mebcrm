@@ -25,14 +25,7 @@ class Produit extends Model
         'title',
         'banner',
         'content',
-        'published_at',
-    ];
-
-    /**
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'published_at' => 'date',
+        'phone',
     ];
 
     // /**

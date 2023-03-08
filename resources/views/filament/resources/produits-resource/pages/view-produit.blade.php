@@ -16,7 +16,7 @@
                         <a><img class="w-12 h-12 rounded-full mr-2" src="https://tailwindcss.com/img/jonathan.jpg" alt="Avatar of Jonathan Reinink"></a>
                         <div class="text-sm">
                             <a class="text-gray-900 font-medium leading-none">Raoul Boucher</a>
-                            <p class="text-gray-600 text-xs">{{$record->published_at->format("d-m-Y")}}</p>
+                            <p class="text-gray-600 text-xs"></p>
                         </div>
                     </div>
                 </div> -->

@@ -10,6 +10,7 @@ use App\Models\Envolope;
 use App\Models\ProspectSuivi;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\Actions\Modal\Actions\Action;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
@@ -30,6 +31,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Livewire\TemporaryUploadedFile;
 use PhpParser\Node\Expr\Cast\String_;
+use Psy\CodeCleaner\AssignThisVariablePass;
 use Psy\VersionUpdater\Downloader;
 use Symfony\Polyfill\Intl\Idn\Resources\unidata\DisallowedRanges;
 
@@ -93,18 +95,34 @@ class ProspectSuiviResource extends Resource
                     }
                     return 'secondary';
                 }),
-                Tables\Columns\TextColumn::make('prospectsuivis.motif')
+                Tables\Columns\ViewColumn::make('prospectsuivis.motif')->view('filament.tables.motif')
                 ->label('Motif')
-                ->default('aucun')
-                //->formatStateUsing(fn (string $state): string => __(strtok($state, ','))),
                 ->getStateUsing(function (Adherant $record) {
-                    if(!empty($record->prospectsuivis()->get()->first()->motif)){
-                        return $record->prospectsuivis()->get()->first()->motif;
-                    }
-                    else{
-                        return 'aucun';
-                    }
-                })
+                        if(!empty($record->prospectsuivis()->get()->first()->motif)){
+                            return $record->prospectsuivis()->get()->first()->motif;
+                        }
+                    }),
+                // Tables\Columns\TextColumn::make('prospectsuivis.motif')
+                // ->label('Motif')
+                // ->default('aucun')
+                // ->limit(20)
+                // ->tooltip(function (Adherant $record){
+                //     if (!empty($record->prospectsuivis()->get()->first()->motif)) {
+                //         return $record->prospectsuivis()->get()->first()->motif;
+                //     }
+                //     else{
+                //         return 'aucun';
+                //     }
+                // })
+                // //->formatStateUsing(fn (string $state): string => __(strtok($state, ','))),
+                // ->getStateUsing(function (Adherant $record) {
+                //     if(!empty($record->prospectsuivis()->get()->first()->motif)){
+                //         return $record->prospectsuivis()->get()->first()->motif;
+                //     }
+                //     else{
+                //         return 'aucun';
+                //     }
+                // })
             ])
             ->filters([
                 //
@@ -180,7 +198,14 @@ class ProspectSuiviResource extends Resource
                 ->icon('heroicon-o-pencil-alt')
                 ->modalHeading(fn (Adherant $record): string => "Changer status de fichier de conversation avec (".ucfirst($record->civilite).' '.ucfirst($record->nom).' '.ucfirst($record->prenom).")")
                 ->size('sm')
-                ->visible(auth()->user()->hasRole('Admin'))
+                ->visible(function (Adherant $record){
+                    if (auth()->user()->hasRole('Admin') && !empty($record->prospectsuivis()->get()->first())) {
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                })
                 ->mountUsing(fn (Forms\ComponentContainer $form, ProspectSuivi $re2) => $form->fill([
                     'audio_status' => $re2,
                 ]))

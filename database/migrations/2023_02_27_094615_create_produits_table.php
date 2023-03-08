@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('excerpt')->nullable();
             $table->string('banner')->nullable();
             $table->longText('content');
-            $table->date('published_at')->nullable();
+            $table->string('phone')->nullable();
             $table->timestamps();
         });
     }

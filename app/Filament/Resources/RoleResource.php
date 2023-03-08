@@ -34,6 +34,7 @@ class RoleResource extends Resource
                     TextInput::make('name')
                     ->minLength(2)
                     ->maxLength(255)
+                    ->required()
                     ->unique(ignoreRecord:true),
 
                     Select::make('permissions')
